@@ -1,0 +1,61 @@
+plugins {
+    id("groovy")
+    id("java-library")
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.micronaut.application") version "3.7.9"
+    id("com.google.cloud.tools.jib") version "3.3.2"
+}
+
+version = "0.1"
+group = "com.puravida.caos"
+
+repositories {
+    mavenCentral()
+}
+compileGroovy.groovyOptions.configurationScript = file('./gradle/config/groovyc.groovy')
+dependencies {
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-jackson-databind")
+    implementation("io.micronaut:micronaut-management")
+    implementation("io.micronaut.groovy:micronaut-runtime-groovy")
+    implementation("io.micronaut.kubernetes:micronaut-kubernetes-client")
+    implementation("io.micronaut.kubernetes:micronaut-kubernetes-informer")
+    implementation("io.micronaut.kubernetes:micronaut-kubernetes-operator")
+    implementation("jakarta.annotation:jakarta.annotation-api")
+    compileOnly("io.micronaut:micronaut-http-validation")
+    runtimeOnly("ch.qos.logback:logback-classic")
+}
+
+application {
+    mainClass.set("com.puravida.caos.Application")
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
+}
+
+
+tasks {
+    jib {
+        allowInsecureRegistries = true
+        from{
+            image = 'openjdk:19-alpine'
+        }
+        to {
+            image = project.findProperty("REGISTRY_NAME") ?: "registry.localhost:5000/caos-operator"
+        }
+    }
+}
+
+graalvmNative.toolchainDetection = false
+micronaut {
+    runtime("netty")
+    testRuntime("spock2")
+    processing {
+        incremental(true)
+        annotations("com.puravida.caos.*")
+    }
+}
+
+
+

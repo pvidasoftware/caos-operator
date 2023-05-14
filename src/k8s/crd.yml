@@ -1,0 +1,47 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: monkeys.caos.puravida.com
+spec:
+  group: caos.puravida.com
+  scope: Namespaced
+  names:
+    plural: monkeys
+    singular: monkey
+    kind: Caos
+    shortNames:
+      - ca
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                mode:
+                  type: string
+                podSelector:
+                  type: string
+                deploymentSelector:
+                  type: string
+              required:
+                - mode
+                - podSelector
+      additionalPrinterColumns:
+        - name: Mode
+          type: string
+          description: The mode to run (friendly, moderate, aggressive)
+          jsonPath: .spec.mode
+        - name: PodSelector
+          type: string
+          description: The selector of pod to kill
+          jsonPath: .spec.podSelector
+        - name: DeploymentSelector
+          type: string
+          description: The name of the deployment to restart
+          jsonPath: .spec.deploymentSelector

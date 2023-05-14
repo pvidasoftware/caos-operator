@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: com.puravida.caos
+testFramework: spock
+sourceLanguage: groovy
+buildTool: gradle
+features: [annotation-api, app-name, gradle, groovy, groovy-application, http-client, jackson-databind, jib, kubernetes, kubernetes-client, kubernetes-informer, logback, management, micronaut-build, netty-server, readme, shade, spock, yaml]

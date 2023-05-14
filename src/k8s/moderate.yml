@@ -1,0 +1,7 @@
+apiVersion: caos.puravida.com/v1
+kind: Caos
+metadata:
+  name: caos-moderate
+spec:
+  mode: moderate
+  podSelector: deployment(.*)

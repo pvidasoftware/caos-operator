@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: caos
+  name: caos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: caos
+  template:
+    metadata:
+      labels:
+        app: caos
+    spec:
+      serviceAccountName: caos-operator-sa
+      containers:
+        - image: registry.localhost:5000/caos-operator
+          name: caos-operator
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "1024Mi"
+            limits:
+              memory: "1024Mi"
